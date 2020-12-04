@@ -63,11 +63,18 @@ class FeedTableViewCell: UITableViewCell {
          contentTextLabel,
          contentImageView].forEach { contentView.addSubview($0) }
 
+        // Title
         titleLable.font = UIFont(name: FeedTableViewCell.titleLabelFont.name, size: FeedTableViewCell.titleLabelFont.size)
         titleLable.numberOfLines = FeedTableViewCell.titleLabelNumberOfLines
+
+        // Subtitle
         subtitleLable.font = UIFont(name: FeedTableViewCell.subtitleLableFont.name, size: FeedTableViewCell.subtitleLableFont.size)
+
+        // Content text label
         contentTextLabel.font = UIFont(name: FeedTableViewCell.contentTextLabelFont.name, size: FeedTableViewCell.contentTextLabelFont.size)
         contentTextLabel.numberOfLines = FeedTableViewCell.contentTextLabelNumberOfLines
+
+        // Content image
         contentImageView.contentMode = .scaleAspectFill
         contentImageView.clipsToBounds = true
     }

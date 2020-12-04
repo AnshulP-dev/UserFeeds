@@ -7,10 +7,18 @@
 
 import Foundation
 
+/**
+ Helper class responsible for parsing JSON data into Swift models
+ */
 class JsonParser {
 
     // MARK: - Public APIs
 
+    /**
+     This method takes json data as input and parse that data into Swift `Feed` models
+     - parameter models: Json dictionary that needs to be parsed
+     - returns: Array of `Feed` models
+     */
     static func parseJsonModels(models: [NSDictionary]) -> [Feed] {
         let decoder = JSONDecoder()
         return models.compactMap { (model) in

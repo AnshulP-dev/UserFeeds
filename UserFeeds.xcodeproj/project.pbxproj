@@ -24,6 +24,8 @@
 		9D68B0102573D6FB00A0FECE /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D68B00F2573D6FB00A0FECE /* FeedTableViewCell.swift */; };
 		9D68B02125741E9B00A0FECE /* NetworkRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D68B02025741E9B00A0FECE /* NetworkRequestHelper.swift */; };
 		9D68B029257424D600A0FECE /* JsonParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D68B028257424D600A0FECE /* JsonParser.swift */; };
+		9D6C205D257A4DB900837FAF /* RealmDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6C205C257A4DB900837FAF /* RealmDBManager.swift */; };
+		9D6C2066257A99D000837FAF /* Collection+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6C2065257A99D000837FAF /* Collection+.swift */; };
 		D5B8FA95E63ED53A6928E490 /* Pods_UserFeedsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA46E05CC9BBBA69B1379946 /* Pods_UserFeedsTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +72,8 @@
 		9D68B00F2573D6FB00A0FECE /* FeedTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		9D68B02025741E9B00A0FECE /* NetworkRequestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestHelper.swift; sourceTree = "<group>"; };
 		9D68B028257424D600A0FECE /* JsonParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonParser.swift; sourceTree = "<group>"; };
+		9D6C205C257A4DB900837FAF /* RealmDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmDBManager.swift; sourceTree = "<group>"; };
+		9D6C2065257A99D000837FAF /* Collection+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+.swift"; sourceTree = "<group>"; };
 		C634E271456BF289ECAD0A55 /* Pods-UserFeedsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UserFeedsUITests.debug.xcconfig"; path = "Target Support Files/Pods-UserFeedsUITests/Pods-UserFeedsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D76915F28EF1F273FFDC6FBF /* Pods_UserFeeds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UserFeeds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9C24469C72EABE3A0AFA296 /* Pods-UserFeeds.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UserFeeds.release.xcconfig"; path = "Target Support Files/Pods-UserFeeds/Pods-UserFeeds.release.xcconfig"; sourceTree = "<group>"; };
@@ -132,6 +136,7 @@
 			children = (
 				9D1FB12D2573D4AE0065FDB3 /* AppLifecycle */,
 				9D1FB1352573D5520065FDB3 /* Controllers */,
+				9D6C2064257A99B400837FAF /* Extensions */,
 				9D1FB1382573D5760065FDB3 /* Helpers */,
 				9D1FB1362573D5640065FDB3 /* Model */,
 				9D68B00E2573D6E100A0FECE /* View */,
@@ -200,6 +205,7 @@
 				9D1FB13C2573D5C40065FDB3 /* FeedViewModelProvider.swift */,
 				9D68B02025741E9B00A0FECE /* NetworkRequestHelper.swift */,
 				9D68B028257424D600A0FECE /* JsonParser.swift */,
+				9D6C205C257A4DB900837FAF /* RealmDBManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -220,6 +226,14 @@
 				9D68B00F2573D6FB00A0FECE /* FeedTableViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		9D6C2064257A99B400837FAF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9D6C2065257A99D000837FAF /* Collection+.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		D3EA71643DD3EB67E486DDBA /* Pods */ = {
@@ -468,6 +482,7 @@
 				9D68B02125741E9B00A0FECE /* NetworkRequestHelper.swift in Sources */,
 				9D1FB14C2573D5E30065FDB3 /* AppRootViewController.swift in Sources */,
 				9D1FB1472573D5DB0065FDB3 /* Feed.swift in Sources */,
+				9D6C205D257A4DB900837FAF /* RealmDBManager.swift in Sources */,
 				9D1FB13D2573D5C40065FDB3 /* FeedViewModelProvider.swift in Sources */,
 				9D1FB1422573D5CE0065FDB3 /* FeedViewModel.swift in Sources */,
 				9D1FB0F72573D38C0065FDB3 /* AppDelegate.swift in Sources */,
@@ -475,6 +490,7 @@
 				9D1FB0F92573D38C0065FDB3 /* SceneDelegate.swift in Sources */,
 				9D68B029257424D600A0FECE /* JsonParser.swift in Sources */,
 				9D4FBD0A257534A700F2A073 /* FeedDetailViewController.swift in Sources */,
+				9D6C2066257A99D000837FAF /* Collection+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

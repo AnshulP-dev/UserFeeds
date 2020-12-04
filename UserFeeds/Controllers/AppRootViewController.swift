@@ -5,8 +5,12 @@
 //  Created by Anshul Parashar on 29/11/20.
 //
 
+import RealmSwift
 import SnapKit
 
+/**
+ This is the root view controller of the app. It shows all User Feeds.
+ */
 class AppRootViewController: UIViewController {
 
     private enum SegmentType: Int {
@@ -16,6 +20,10 @@ class AppRootViewController: UIViewController {
         case other
     }
 
+    // MARK: - Constants
+
+    private static let estimatedCellHeight: CGFloat = 600.0
+
     // MARK: - Instance Vars
 
     private lazy var tableView: UITableView = {
@@ -23,7 +31,7 @@ class AppRootViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 600
+        tableView.estimatedRowHeight = AppRootViewController.estimatedCellHeight
         tableView.tableFooterView = UIView()
         tableView.register(FeedTableViewCell.self, forCellReuseIdentifier: FeedTableViewCell.reuseID)
         return tableView
@@ -44,13 +52,15 @@ class AppRootViewController: UIViewController {
             NSLocalizedString("Other", comment: "")
         ]
         let segmentedControl = UISegmentedControl(items: items)
-        segmentedControl.backgroundColor = .orange
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return segmentedControl
     }()
 
+    /// It holds view models for all the feeds available to display
     private var allViewModels = [FeedViewModel]()
+
+    /// It holds view models for specific type of feeds e.g. Text, Image, Other, All - based on the user preference selected through Segment Control.
     private var filteredViewModels = [FeedViewModel]()
 
     // MARK: - Lifecycle methods
@@ -84,16 +94,28 @@ class AppRootViewController: UIViewController {
         activityIndicatorView.startAnimating()
         NetworkRequestHelper.fetchUserFeeds { [weak self] (feeds, error) in
             if let feeds = feeds {
+                // Got the feeds from Network.
+                // 1. Create view models
+                // 2. Stop showing loading indicator
+                // 3. Filter view models based on SegmentControl segment selection
+                // 4. Save feeds in Database
                 FeedViewModelProvider.viewModels(for: feeds, completion: { [weak self] (viewModels) in
                     self?.allViewModels = viewModels
                     self?.activityIndicatorView.stopAnimating()
                     self?.filterUserFeeds()
+                    RealmDBManager.deleteOldFeedsAndSave(newFeeds: feeds)
                 })
             } else {
-                // TODO: Show error state. For now, just showing empty cells
-                self?.allViewModels = []
-                self?.activityIndicatorView.stopAnimating()
-                self?.filterUserFeeds()
+                // TODO: Show error state. For now, just loading feeds from local DB
+                // Didn't get feeds from Network
+                // 1. Fetch feeds from DB and create view models
+                // 2. Stop showing loading indicator
+                // 3. Filter view models based on SegmentControl segment selection
+                FeedViewModelProvider.viewModels(for: RealmDBManager.existingFeeds(), completion: { [weak self] (viewModels) in
+                    self?.allViewModels = viewModels
+                    self?.activityIndicatorView.stopAnimating()
+                    self?.filterUserFeeds()
+                })
             }
         }
     }
@@ -145,7 +167,9 @@ extension AppRootViewController: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        cell.setup(with: filteredViewModels[indexPath.row])
+        if let viewModel = filteredViewModels[safe: indexPath.row] {
+            cell.setup(with: viewModel)
+        }
         return cell
     }
 }
@@ -155,7 +179,12 @@ extension AppRootViewController: UITableViewDataSource {
 extension AppRootViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailViewController = FeedDetailViewController(viewModel: filteredViewModels[indexPath.row])
+        guard let viewModel = filteredViewModels[safe: indexPath.row] else {
+            assertionFailure("Trying to access data from \"out of bounds index\"")
+            return
+        }
+
+        let detailViewController = FeedDetailViewController(viewModel: viewModel)
         navigationController?.pushViewController(detailViewController, animated: true)
     }
 }

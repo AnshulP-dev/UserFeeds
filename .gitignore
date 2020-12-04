@@ -1,4 +1,4 @@
-
-Pods/
+// Pushed Pods/ folder in repo to make it easy for evaluator to just download and run
+#Pods/
 .DS_Store
 xcuserdata/
