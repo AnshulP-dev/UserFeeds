@@ -52,6 +52,7 @@ class AppRootViewController: UIViewController {
             NSLocalizedString("Other", comment: "")
         ]
         let segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.backgroundColor = .orange
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return segmentedControl
