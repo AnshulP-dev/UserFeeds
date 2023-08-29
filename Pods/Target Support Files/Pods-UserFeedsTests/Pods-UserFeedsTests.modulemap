@@ -1,6 +1,0 @@
-framework module Pods_UserFeedsTests {
-  umbrella header "Pods-UserFeedsTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
