@@ -43,6 +43,7 @@ typedef SSIZE_T ssize_t;
 
 #include <realm/util/features.h>
 #include <realm/util/assert.hpp>
+#include <realm/util/functional.hpp>
 #include <realm/util/safe_int_ops.hpp>
 
 // GCC defines __i386__ and __x86_64__
@@ -74,7 +75,7 @@ typedef SSIZE_T ssize_t;
 
 namespace realm {
 
-using StringCompareCallback = std::function<bool(const char* string1, const char* string2)>;
+using StringCompareCallback = util::UniqueFunction<bool(const char* string1, const char* string2)>;
 
 extern signed char sse_support;
 extern signed char avx_support;
@@ -122,8 +123,8 @@ REALM_FORCEINLINE bool sseavx()
 void cpuid_init();
 void* round_up(void* p, size_t align);
 void* round_down(void* p, size_t align);
-size_t round_up(size_t p, size_t align);
-size_t round_down(size_t p, size_t align);
+constexpr size_t round_up(size_t p, size_t align);
+constexpr size_t round_down(size_t p, size_t align);
 void millisleep(unsigned long milliseconds);
 
 #ifdef _WIN32
@@ -192,7 +193,7 @@ inline int ctz(size_t x)
 #ifdef REALM_PTR_64
     return __builtin_ctzll(x); // returns int
 #else
-    return __builtin_ctz(x);      // returns int
+    return __builtin_ctz(x); // returns int
 #endif
 #elif defined(_WIN32)
     unsigned long index = 0;
@@ -321,38 +322,53 @@ OutputIt safe_copy_n(InputIt first, Size count, OutputIt result)
 #endif
 }
 
-
-template <class T>
-struct Wrap {
-    Wrap(const T& v)
-        : m_value(v)
-    {
+// Converts ascii c-locale uppercase characters to lower case,
+// leaves other char values unchanged.
+inline char toLowerAscii(char c)
+{
+    if (isascii(c) && isupper(c)) {
+#if REALM_ANDROID
+        return tolower(c); // _tolower is not supported on all ABI levels
+#else
+        return _tolower(c);
+#endif
     }
-    operator T() const
-    {
-        return m_value;
-    }
+    return c;
+}
 
-private:
-    T m_value;
-};
+inline void* round_up(void* p, size_t align)
+{
+    size_t r = size_t(p) % align == 0 ? 0 : align - size_t(p) % align;
+    return static_cast<char*>(p) + r;
+}
 
-// PlacementDelete is intended for use with std::unique_ptr when it holds an object allocated with
-// placement new. It simply calls the object's destructor without freeing the memory.
-struct PlacementDelete {
-    template <class T>
-    void operator()(T* v) const
-    {
-        v->~T();
-    }
-};
+inline void* round_down(void* p, size_t align)
+{
+    size_t r = size_t(p);
+    return reinterpret_cast<void*>(r & ~(align - 1));
+}
+
+constexpr inline size_t round_up(size_t p, size_t align)
+{
+    size_t r = p % align == 0 ? 0 : align - p % align;
+    return p + r;
+}
+
+constexpr inline size_t round_down(size_t p, size_t align)
+{
+    size_t r = p;
+    return r & (~(align - 1));
+}
+
 
 #ifdef _WIN32
-typedef void* FileDesc;
+typedef HANDLE FileDesc;
 #else
 typedef int FileDesc;
 #endif
 
+
+enum class IteratorControl { AdvanceToNext, Stop };
 
 } // namespace realm
 

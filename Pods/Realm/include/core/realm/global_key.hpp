@@ -36,7 +36,7 @@ class Mixed;
 /// We define a way to map from 128-bit on-write GlobalKeys to local 64-bit ObjKeys.
 ///
 /// The three object ID types are:
-/// a. Global Keyss for objects in tables without primary keys.
+/// a. Global Keys for objects in tables without primary keys.
 /// b. Global Keys for objects in tables with integer primary keys.
 /// c. Global Keys for objects in tables with other primary key types.
 ///
@@ -123,7 +123,6 @@ struct GlobalKey {
     ObjKey get_local_key(uint64_t sync_file_id)
     {
         REALM_ASSERT(m_hi <= 0x3fffffff);
-        REALM_ASSERT(lo() <= std::numeric_limits<uint32_t>::max());
 
         auto high = m_hi;
         if (high == sync_file_id)

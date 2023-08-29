@@ -32,9 +32,6 @@
 #include <realm/keys.hpp>
 #include <realm/db.hpp>
 #include <realm/mixed.hpp>
-#include <realm/util/metered/map.hpp>
-#include <realm/util/metered/set.hpp>
-#include <realm/util/metered/string.hpp>
 
 namespace realm {
 
@@ -44,7 +41,7 @@ namespace sync {
 
 // Any unambiguous object identifier. Monostate represents NULL (can't use realm::None or std::nullptr_t because they
 // do not implement operator<).
-using PrimaryKey = mpark::variant<mpark::monostate, int64_t, StringData, GlobalKey, ObjectId>;
+using PrimaryKey = mpark::variant<mpark::monostate, int64_t, StringData, GlobalKey, ObjectId, UUID>;
 
 /// FIXME: Since PrimaryKey is a typedef to an `std` type, ADL for operator<<
 /// doesn't work properly. This struct exists solely for passing PrimaryKey
@@ -68,7 +65,7 @@ public:
     bool empty() const noexcept;
 
     // A map from table name to a set of object ids.
-    util::metered::map<std::string, util::metered::set<PrimaryKey>> m_objects;
+    std::map<std::string, std::set<PrimaryKey>> m_objects;
 };
 
 // FieldSet is a set of fields in tables. A field is defined by a
@@ -83,7 +80,7 @@ public:
 
     // A map from table name to a map from column name to a set of
     // object ids.
-    util::metered::map<std::string, util::metered::map<std::string, util::metered::set<PrimaryKey>>> m_fields;
+    std::map<std::string, std::map<std::string, std::set<PrimaryKey>>> m_fields;
 };
 
 struct GlobalID {
